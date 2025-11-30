@@ -1,0 +1,2449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astral Quest - Explore the Universe</title>
+    <meta name="description" content="Embark on an interactive space journey with Astral Quest. Explore galaxies, play space games, and discover cosmic wonders.">
+    <meta name="keywords" content="space exploration, astronomy, galaxies, nebulae, space games, cosmic journey">
+    <meta name="author" content="Astral Quest Team">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://astralquest.space/">
+    <meta property="og:title" content="Astral Quest - Explore the Universe">
+    <meta property="og:description" content="Embark on an interactive space journey with Astral Quest. Explore galaxies, play space games, and discover cosmic wonders.">
+    <meta property="og:image" content="https://astralquest.space/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://astralquest.space/">
+    <meta property="twitter:title" content="Astral Quest - Explore the Universe">
+    <meta property="twitter:description" content="Embark on an interactive space journey with Astral Quest. Explore galaxies, play space games, and discover cosmic wonders.">
+    <meta property="twitter:image" content="https://astralquest.space/images/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #0a0e27;
+            --secondary-color: #1a237e;
+            --accent-color: #7c4dff;
+            --text-color: #e0e0ff;
+            --highlight-color: #ffab00;
+            --success-color: #00e676;
+            --danger-color: #ff5252;
+            --card-bg: rgba(26, 35, 126, 0.3);
+            --card-border: rgba(124, 77, 255, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover {
+            color: var(--highlight-color);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--text-color);
+        }
+        
+        .logo i {
+            color: var(--accent-color);
+            font-size: 2rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            font-weight: 600;
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        #starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            padding: 20px;
+            max-width: 800px;
+        }
+        
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(124, 77, 255, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(124, 77, 255, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(124, 77, 255, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-color);
+            border-color: var(--accent-color);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(124, 77, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        /* Section Styles */
+        section {
+            padding: 80px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+        
+        /* 3D Star Map Section */
+        .star-map-section {
+            background: radial-gradient(ellipse at center, var(--secondary-color) 0%, var(--primary-color) 100%);
+            position: relative;
+        }
+        
+        #star-map-container {
+            height: 500px;
+            width: 100%;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .map-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .map-btn {
+            background: rgba(26, 35, 126, 0.7);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .map-btn:hover {
+            background: rgba(124, 77, 255, 0.5);
+        }
+        
+        .celestial-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(10, 14, 39, 0.8);
+            border: 1px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 15px;
+            width: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+        
+        .celestial-info h3 {
+            margin-top: 0;
+            color: var(--highlight-color);
+        }
+        
+        .celestial-info p {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+        
+        /* Games Section */
+        .games-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(124, 77, 255, 0.3);
+            border-color: var(--accent-color);
+        }
+        
+        .game-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        .game-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .game-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .game-content h3 {
+            margin-top: 0;
+            color: var(--highlight-color);
+        }
+        
+        .game-content p {
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .game-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .game-stat i {
+            color: var(--accent-color);
+        }
+        
+        /* Space Facts Section */
+        .facts-section {
+            background: radial-gradient(ellipse at bottom, var(--secondary-color) 0%, var(--primary-color) 100%);
+        }
+        
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .fact-card {
+            background: rgba(26, 35, 126, 0.2);
+            border: 1px solid rgba(124, 77, 255, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .fact-card:hover {
+            background: rgba(26, 35, 126, 0.4);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+        }
+        
+        .fact-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+        
+        .fact-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--highlight-color);
+        }
+        
+        /* Leaderboard Section */
+        .leaderboard-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        
+        .leaderboard-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: rgba(26, 35, 126, 0.5);
+            border: 1px solid var(--card-border);
+            color: var(--text-color);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+        
+        .tab-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+        
+        .tab-btn:hover {
+            background: rgba(124, 77, 255, 0.5);
+        }
+        
+        .tab-btn.active:hover {
+            background: var(--accent-color);
+        }
+        
+        .leaderboard-content {
+            background: rgba(26, 35, 126, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .leaderboard-table th {
+            background: rgba(124, 77, 255, 0.3);
+            padding: 15px;
+            text-align: left;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+        
+        .leaderboard-table td {
+            padding: 15px;
+            border-top: 1px solid rgba(124, 77, 255, 0.1);
+        }
+        
+        .leaderboard-table tr:hover {
+            background: rgba(124, 77, 255, 0.1);
+        }
+        
+        .rank {
+            font-weight: 700;
+            color: var(--highlight-color);
+        }
+        
+        .rank-1 {
+            color: #ffd700;
+        }
+        
+        .rank-2 {
+            color: #c0c0c0;
+        }
+        
+        .rank-3 {
+            color: #cd7f32;
+        }
+        
+        .player-name {
+            font-weight: 600;
+        }
+        
+        .player-score {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-color);
+            border-top: 1px solid var(--card-border);
+            padding: 50px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--highlight-color);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(124, 77, 255, 0.2);
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(124, 77, 255, 0.2);
+            font-size: 0.9rem;
+            color: rgba(224, 224, 255, 0.7);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: var(--secondary-color);
+            border-radius: 15px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--accent-color);
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: var(--highlight-color);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--danger-color);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        /* Game Container */
+        .game-container {
+            width: 100%;
+            height: 500px;
+            background: var(--primary-color);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            z-index: 10;
+        }
+        
+        .game-score, .game-lives {
+            background: rgba(10, 14, 39, 0.7);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: 'Orbitron', monospace;
+            font-weight: 600;
+        }
+        
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(10, 14, 39, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--accent-color);
+            display: none;
+            z-index: 20;
+        }
+        
+        .game-over h3 {
+            color: var(--danger-color);
+            margin-bottom: 15px;
+        }
+        
+        .game-over p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 14, 39, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                gap: 15px;
+            }
+            
+            nav ul.active {
+                display: flex;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 200px;
+            }
+            
+            .celestial-info {
+                width: 200px;
+                font-size: 0.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .leaderboard-table {
+                font-size: 0.9rem;
+            }
+            
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 10px;
+            }
+        }
+        
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader-content {
+            text-align: center;
+        }
+        
+        .loader-spinner {
+            width: 80px;
+            height: 80px;
+            border: 5px solid rgba(124, 77, 255, 0.2);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(26, 35, 126, 0.9);
+            color: var(--text-color);
+            padding: 15px 20px;
+            border-radius: 5px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            border-left-color: var(--success-color);
+        }
+        
+        .toast.error {
+            border-left-color: var(--danger-color);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(124, 77, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(124, 77, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(124, 77, 255, 0);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <h2>Initializing Space Journey...</h2>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-rocket"></i>
+                    <span>Astral Quest</span>
+                </div>
+                <nav>
+                    <ul id="nav-menu">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#explore">Explore</a></li>
+                        <li><a href="#games">Games</a></li>
+                        <li><a href="#facts">Cosmic Facts</a></li>
+                        <li><a href="#leaderboard">Leaderboard</a></li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <canvas id="starfield"></canvas>
+        <div class="hero-content">
+            <h1 class="floating">Explore the Universe</h1>
+            <p>Embark on an interactive space journey with Astral Quest. Discover distant galaxies, play engaging space games, and unlock the mysteries of the cosmos.</p>
+            <div class="cta-buttons">
+                <a href="#explore" class="btn btn-primary pulse">Start Exploring</a>
+                <a href="#games" class="btn btn-secondary">Play Games</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3D Star Map Section -->
+    <section class="star-map-section" id="explore">
+        <div class="container">
+            <div class="section-title">
+                <h2>Interactive Star Map</h2>
+                <p>Navigate through the cosmos and discover celestial wonders</p>
+            </div>
+            <div id="star-map-container">
+                <canvas id="star-map"></canvas>
+                <div class="map-controls">
+                    <button class="map-btn" id="zoom-in"><i class="fas fa-search-plus"></i> Zoom In</button>
+                    <button class="map-btn" id="zoom-out"><i class="fas fa-search-minus"></i> Zoom Out</button>
+                    <button class="map-btn" id="reset-view"><i class="fas fa-sync-alt"></i> Reset View</button>
+                    <button class="map-btn" id="toggle-rotation"><i class="fas fa-pause"></i> Pause Rotation</button>
+                </div>
+                <div class="celestial-info" id="celestial-info">
+                    <h3 id="celestial-name">Select a celestial object</h3>
+                    <p id="celestial-description">Click on any star, planet, or galaxy to learn more about it.</p>
+                    <div id="celestial-details"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="games-section" id="games">
+        <div class="container">
+            <div class="section-title">
+                <h2>Space Games</h2>
+                <p>Challenge yourself with our collection of space-themed games</p>
+            </div>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1446776877081-d282a0f896e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <span class="game-badge">Popular</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>Asteroid Blaster</h3>
+                        <p>Navigate through an asteroid field and blast your way to a high score in this action-packed space shooter.</p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Action</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>5 min</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary game-launch-btn" data-game="asteroid">Play Now</button>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <span class="game-badge">New</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>Galaxy Explorer</h3>
+                        <p>Pilot your spaceship through uncharted galaxies, collecting resources and discovering new worlds.</p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <i class="fas fa-star"></i>
+                                <span>4.6</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-compass"></i>
+                                <span>Adventure</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>10 min</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary game-launch-btn" data-game="galaxy">Play Now</button>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-image" style="background-image: url('https://images.unsplash.com/photo-1502134249126-9f3755a50d78?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');">
+                        <span class="game-badge">Challenge</span>
+                    </div>
+                    <div class="game-content">
+                        <h3>Planet Puzzle</h3>
+                        <p>Solve challenging puzzles by aligning planets and stars to create constellations in this brain-teasing game.</p>
+                        <div class="game-stats">
+                            <div class="game-stat">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-puzzle-piece"></i>
+                                <span>Puzzle</span>
+                            </div>
+                            <div class="game-stat">
+                                <i class="fas fa-clock"></i>
+                                <span>15 min</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary game-launch-btn" data-game="puzzle">Play Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Space Facts Section -->
+    <section class="facts-section" id="facts">
+        <div class="container">
+            <div class="section-title">
+                <h2>Cosmic Facts</h2>
+                <p>Discover fascinating facts about our universe</p>
+            </div>
+            <div class="facts-grid">
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <h3>Solar System</h3>
+                    <p>Our solar system is 4.6 billion years old and consists of the Sun and everything bound to it by gravity.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-meteor"></i>
+                    </div>
+                    <h3>Meteor Showers</h3>
+                    <p>When Earth passes through the debris trail of a comet, we experience meteor showers with dozens of meteors per hour.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h3>Exoplanets</h3>
+                    <p>There are more than 4,000 confirmed exoplanets in our galaxy, with billions more yet to be discovered.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Star Formation</h3>
+                    <p>Stars are born in nebulae when clouds of gas and dust collapse under their own gravity.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>Space Exploration</h3>
+                    <p>Humans have been exploring space for over 60 years, with the first satellite launched in 1957.</p>
+                </div>
+                <div class="fact-card">
+                    <div class="fact-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3>Lunar Mysteries</h3>
+                    <p>The Moon is moving away from Earth at a rate of about 3.8 centimeters per year.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leaderboard Section -->
+    <section class="leaderboard-section" id="leaderboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Leaderboard</h2>
+                <p>See how you rank against other space explorers</p>
+            </div>
+            <div class="leaderboard-tabs">
+                <button class="tab-btn active" data-tab="asteroid">Asteroid Blaster</button>
+                <button class="tab-btn" data-tab="galaxy">Galaxy Explorer</button>
+                <button class="tab-btn" data-tab="puzzle">Planet Puzzle</button>
+                <button class="tab-btn" data-tab="overall">Overall</button>
+            </div>
+            <div class="leaderboard-content">
+                <table class="leaderboard-table" id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Score</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- Leaderboard data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>About Astral Quest</h3>
+                    <p>Astral Quest is an interactive space exploration platform designed to educate and entertain users about the wonders of our universe.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#explore">Explore</a></li>
+                        <li><a href="#games">Games</a></li>
+                        <li><a href="#facts">Cosmic Facts</a></li>
+                        <li><a href="#leaderboard">Leaderboard</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Space Missions</a></li>
+                        <li><a href="#">Astronomy Guide</a></li>
+                        <li><a href="#">Space News</a></li>
+                        <li><a href="#">Educational Materials</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to our newsletter for the latest space discoveries and game updates.</p>
+                    <form id="newsletter-form">
+                        <input type="email" placeholder="Your email address" required style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(26, 35, 126, 0.5); border: 1px solid var(--card-border); border-radius: 5px; color: var(--text-color);">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Astral Quest. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--danger-color);"></i> for space enthusiasts.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Game Modal -->
+    <div class="modal" id="game-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="game-title">Game Title</h2>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="game-container" id="game-container">
+                    <!-- Game content will be loaded here -->
+                </div>
+                <div class="game-instructions" id="game-instructions" style="margin-top: 20px;">
+                    <h3>How to Play</h3>
+                    <p id="game-instructions-text">Game instructions will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast">
+        <p id="toast-message">Notification message</p>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide the loader after the page loads
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+
+            // Mobile menu toggle
+            const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+            const navMenu = document.getElementById('nav-menu');
+            
+            mobileMenuToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.getElementById('header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        // Close mobile menu if open
+                        navMenu.classList.remove('active');
+                    }
+                });
+            });
+
+            // Starfield background for hero section
+            const starfieldCanvas = document.getElementById('starfield');
+            const starfieldCtx = starfieldCanvas.getContext('2d');
+            
+            function resizeStarfield() {
+                starfieldCanvas.width = window.innerWidth;
+                starfieldCanvas.height = window.innerHeight;
+            }
+            
+            resizeStarfield();
+            window.addEventListener('resize', resizeStarfield);
+            
+            // Create stars
+            const stars = [];
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * starfieldCanvas.width,
+                    y: Math.random() * starfieldCanvas.height,
+                    radius: Math.random() * 1.5,
+                    opacity: Math.random(),
+                    speed: Math.random() * 0.05
+                });
+            }
+            
+            // Animate starfield
+            function animateStarfield() {
+                starfieldCtx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
+                
+                stars.forEach(star => {
+                    starfieldCtx.beginPath();
+                    starfieldCtx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    starfieldCtx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+                    starfieldCtx.fill();
+                    
+                    // Twinkle effect
+                    star.opacity += star.speed;
+                    if (star.opacity <= 0 || star.opacity >= 1) {
+                        star.speed = -star.speed;
+                    }
+                });
+                
+                requestAnimationFrame(animateStarfield);
+            }
+            
+            animateStarfield();
+
+            // 3D Star Map
+            const starMapCanvas = document.getElementById('star-map');
+            const starMapCtx = starMapCanvas.getContext('2d');
+            const celestialInfo = document.getElementById('celestial-info');
+            
+            // Set canvas size
+            function resizeStarMap() {
+                const container = document.getElementById('star-map-container');
+                starMapCanvas.width = container.clientWidth;
+                starMapCanvas.height = container.clientHeight;
+            }
+            
+            resizeStarMap();
+            window.addEventListener('resize', resizeStarMap);
+            
+            // Celestial objects data
+            const celestialObjects = [
+                {
+                    name: "Andromeda Galaxy",
+                    type: "galaxy",
+                    x: 0.3,
+                    y: 0.4,
+                    radius: 20,
+                    color: "#9c88ff",
+                    description: "The Andromeda Galaxy is the nearest spiral galaxy to the Milky Way, approximately 2.5 million light-years away.",
+                    details: "It is on a collision course with the Milky Way and is expected to merge with our galaxy in about 4.5 billion years."
+                },
+                {
+                    name: "Orion Nebula",
+                    type: "nebula",
+                    x: 0.7,
+                    y: 0.3,
+                    radius: 15,
+                    color: "#ff9ff3",
+                    description: "The Orion Nebula is a diffuse nebula situated in the Milky Way, south of Orion's Belt.",
+                    details: "It is one of the brightest nebulae and is visible to the naked eye in the night sky."
+                },
+                {
+                    name: "Kepler-22b",
+                    type: "exoplanet",
+                    x: 0.5,
+                    y: 0.7,
+                    radius: 10,
+                    color: "#54a0ff",
+                    description: "Kepler-22b is an exoplanet orbiting within the habitable zone of the Sun-like star Kepler-22.",
+                    details: "It is located about 600 light-years away from Earth in the constellation of Cygnus."
+                },
+                {
+                    name: "Crab Nebula",
+                    type: "nebula",
+                    x: 0.2,
+                    y: 0.6,
+                    radius: 12,
+                    color: "#ff6b6b",
+                    description: "The Crab Nebula is a supernova remnant in the constellation of Taurus.",
+                    details: "It corresponds to a bright supernova recorded by Chinese astronomers in 1054 AD."
+                },
+                {
+                    name: "TRAPPIST-1 System",
+                    type: "star-system",
+                    x: 0.8,
+                    y: 0.6,
+                    radius: 8,
+                    color: "#f9ca24",
+                    description: "TRAPPIST-1 is an ultra-cool dwarf star with seven Earth-sized exoplanets.",
+                    details: "Three of these planets are located in the habitable zone, making them prime candidates for hosting life."
+                }
+            ];
+            
+            // Star map variables
+            let zoom = 1;
+            let rotation = 0;
+            let isRotating = true;
+            let selectedObject = null;
+            
+            // Draw star map
+            function drawStarMap() {
+                starMapCtx.clearRect(0, 0, starMapCanvas.width, starMapCanvas.height);
+                
+                // Draw background stars
+                for (let i = 0; i < 200; i++) {
+                    const x = Math.random() * starMapCanvas.width;
+                    const y = Math.random() * starMapCanvas.height;
+                    const radius = Math.random() * 1.5;
+                    
+                    starMapCtx.beginPath();
+                    starMapCtx.arc(x, y, radius, 0, Math.PI * 2);
+                    starMapCtx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    starMapCtx.fill();
+                }
+                
+                // Draw celestial objects
+                celestialObjects.forEach(obj => {
+                    const x = obj.x * starMapCanvas.width;
+                    const y = obj.y * starMapCanvas.height;
+                    
+                    // Apply rotation transformation
+                    const centerX = starMapCanvas.width / 2;
+                    const centerY = starMapCanvas.height / 2;
+                    
+                    const angle = rotation * Math.PI / 180;
+                    const rotatedX = centerX + (x - centerX) * Math.cos(angle) - (y - centerY) * Math.sin(angle);
+                    const rotatedY = centerY + (x - centerX) * Math.sin(angle) + (y - centerY) * Math.cos(angle);
+                    
+                    // Draw glow effect
+                    const gradient = starMapCtx.createRadialGradient(
+                        rotatedX, rotatedY, 0,
+                        rotatedX, rotatedY, obj.radius * 3 * zoom
+                    );
+                    gradient.addColorStop(0, obj.color);
+                    gradient.addColorStop(1, 'transparent');
+                    
+                    starMapCtx.beginPath();
+                    starMapCtx.arc(rotatedX, rotatedY, obj.radius * 3 * zoom, 0, Math.PI * 2);
+                    starMapCtx.fillStyle = gradient;
+                    starMapCtx.fill();
+                    
+                    // Draw object
+                    starMapCtx.beginPath();
+                    starMapCtx.arc(rotatedX, rotatedY, obj.radius * zoom, 0, Math.PI * 2);
+                    starMapCtx.fillStyle = obj.color;
+                    starMapCtx.fill();
+                    
+                    // Draw selection indicator
+                    if (selectedObject === obj) {
+                        starMapCtx.beginPath();
+                        starMapCtx.arc(rotatedX, rotatedY, (obj.radius + 5) * zoom, 0, Math.PI * 2);
+                        starMapCtx.strokeStyle = '#ffffff';
+                        starMapCtx.lineWidth = 2;
+                        starMapCtx.stroke();
+                    }
+                });
+                
+                // Continue rotation if enabled
+                if (isRotating) {
+                    rotation += 0.1;
+                    requestAnimationFrame(drawStarMap);
+                }
+            }
+            
+            // Start drawing the star map
+            drawStarMap();
+            
+            // Star map controls
+            document.getElementById('zoom-in').addEventListener('click', function() {
+                zoom = Math.min(zoom * 1.2, 3);
+                drawStarMap();
+            });
+            
+            document.getElementById('zoom-out').addEventListener('click', function() {
+                zoom = Math.max(zoom / 1.2, 0.5);
+                drawStarMap();
+            });
+            
+            document.getElementById('reset-view').addEventListener('click', function() {
+                zoom = 1;
+                rotation = 0;
+                drawStarMap();
+            });
+            
+            document.getElementById('toggle-rotation').addEventListener('click', function() {
+                isRotating = !isRotating;
+                this.innerHTML = isRotating ? '<i class="fas fa-pause"></i> Pause Rotation' : '<i class="fas fa-play"></i> Resume Rotation';
+                
+                if (isRotating) {
+                    drawStarMap();
+                }
+            });
+            
+            // Handle clicks on celestial objects
+            starMapCanvas.addEventListener('click', function(e) {
+                const rect = starMapCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Check if click is on a celestial object
+                let clickedObject = null;
+                
+                celestialObjects.forEach(obj => {
+                    const objX = obj.x * starMapCanvas.width;
+                    const objY = obj.y * starMapCanvas.height;
+                    
+                    // Apply rotation transformation
+                    const centerX = starMapCanvas.width / 2;
+                    const centerY = starMapCanvas.height / 2;
+                    
+                    const angle = rotation * Math.PI / 180;
+                    const rotatedX = centerX + (objX - centerX) * Math.cos(angle) - (objY - centerY) * Math.sin(angle);
+                    const rotatedY = centerY + (objX - centerX) * Math.sin(angle) + (objY - centerY) * Math.cos(angle);
+                    
+                    // Calculate distance
+                    const distance = Math.sqrt(Math.pow(x - rotatedX, 2) + Math.pow(y - rotatedY, 2));
+                    
+                    if (distance <= obj.radius * zoom) {
+                        clickedObject = obj;
+                    }
+                });
+                
+                if (clickedObject) {
+                    selectedObject = clickedObject;
+                    showCelestialInfo(clickedObject);
+                    drawStarMap();
+                } else {
+                    selectedObject = null;
+                    celestialInfo.style.display = 'none';
+                    drawStarMap();
+                }
+            });
+            
+            // Show celestial object information
+            function showCelestialInfo(obj) {
+                document.getElementById('celestial-name').textContent = obj.name;
+                document.getElementById('celestial-description').textContent = obj.description;
+                document.getElementById('celestial-details').innerHTML = `<p><strong>Type:</strong> ${obj.type}</p><p>${obj.details}</p>`;
+                celestialInfo.style.display = 'block';
+            }
+
+            // Game Modal
+            const gameModal = document.getElementById('game-modal');
+            const modalClose = document.getElementById('modal-close');
+            const gameTitle = document.getElementById('game-title');
+            const gameContainer = document.getElementById('game-container');
+            const gameInstructions = document.getElementById('game-instructions-text');
+            
+            // Game launch buttons
+            document.querySelectorAll('.game-launch-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const gameType = this.getAttribute('data-game');
+                    launchGame(gameType);
+                });
+            });
+            
+            // Close modal
+            modalClose.addEventListener('click', function() {
+                gameModal.style.display = 'none';
+                // Stop any running games
+                gameContainer.innerHTML = '';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target === gameModal) {
+                    gameModal.style.display = 'none';
+                    gameContainer.innerHTML = '';
+                }
+            });
+            
+            // Launch game function
+            function launchGame(gameType) {
+                gameModal.style.display = 'flex';
+                
+                switch(gameType) {
+                    case 'asteroid':
+                        gameTitle.textContent = 'Asteroid Blaster';
+                        gameInstructions.textContent = 'Use arrow keys to move your spaceship and spacebar to shoot. Avoid asteroids and try to get the highest score!';
+                        launchAsteroidGame();
+                        break;
+                    case 'galaxy':
+                        gameTitle.textContent = 'Galaxy Explorer';
+                        gameInstructions.textContent = 'Click on planets to explore them. Collect resources and discover new worlds. Each planet has unique resources and challenges!';
+                        launchGalaxyGame();
+                        break;
+                    case 'puzzle':
+                        gameTitle.textContent = 'Planet Puzzle';
+                        gameInstructions.textContent = 'Drag and drop planets to create constellations. Match the pattern shown on the right to complete each level!';
+                        launchPuzzleGame();
+                        break;
+                }
+            }
+            
+            // Asteroid Blaster Game
+            function launchAsteroidGame() {
+                gameContainer.innerHTML = `
+                    <canvas id="asteroid-game-canvas" width="800" height="500"></canvas>
+                    <div class="game-ui">
+                        <div class="game-score">Score: <span id="asteroid-score">0</span></div>
+                        <div class="game-lives">Lives: <span id="asteroid-lives">3</span></div>
+                    </div>
+                    <div class="game-over" id="asteroid-game-over">
+                        <h3>Game Over</h3>
+                        <p>Your final score: <span id="asteroid-final-score">0</span></p>
+                        <button class="btn btn-primary" id="asteroid-restart">Play Again</button>
+                        <button class="btn btn-secondary" id="asteroid-submit-score">Submit Score</button>
+                    </div>
+                `;
+                
+                const canvas = document.getElementById('asteroid-game-canvas');
+                const ctx = canvas.getContext('2d');
+                const scoreElement = document.getElementById('asteroid-score');
+                const livesElement = document.getElementById('asteroid-lives');
+                const gameOverElement = document.getElementById('asteroid-game-over');
+                const finalScoreElement = document.getElementById('asteroid-final-score');
+                const restartButton = document.getElementById('asteroid-restart');
+                const submitScoreButton = document.getElementById('asteroid-submit-score');
+                
+                // Set canvas size to container
+                canvas.width = gameContainer.clientWidth;
+                canvas.height = gameContainer.clientHeight;
+                
+                // Game variables
+                let score = 0;
+                let lives = 3;
+                let gameRunning = true;
+                let keys = {};
+                
+                // Player spaceship
+                const player = {
+                    x: canvas.width / 2,
+                    y: canvas.height - 50,
+                    width: 30,
+                    height: 30,
+                    speed: 5,
+                    color: '#7c4dff'
+                };
+                
+                // Bullets
+                const bullets = [];
+                
+                // Asteroids
+                const asteroids = [];
+                
+                // Create initial asteroids
+                for (let i = 0; i < 5; i++) {
+                    createAsteroid();
+                }
+                
+                // Create asteroid function
+                function createAsteroid() {
+                    const size = Math.random() * 30 + 20;
+                    asteroids.push({
+                        x: Math.random() * canvas.width,
+                        y: -size,
+                        width: size,
+                        height: size,
+                        speed: Math.random() * 3 + 1,
+                        rotation: 0,
+                        rotationSpeed: Math.random() * 0.1 - 0.05
+                    });
+                }
+                
+                // Keyboard controls
+                window.addEventListener('keydown', function(e) {
+                    keys[e.key] = true;
+                    
+                    // Spacebar to shoot
+                    if (e.key === ' ' && gameRunning) {
+                        bullets.push({
+                            x: player.x,
+                            y: player.y,
+                            width: 4,
+                            height: 10,
+                            speed: 8
+                        });
+                    }
+                });
+                
+                window.addEventListener('keyup', function(e) {
+                    keys[e.key] = false;
+                });
+                
+                // Game loop
+                function gameLoop() {
+                    if (!gameRunning) return;
+                    
+                    // Clear canvas
+                    ctx.fillStyle = '#0a0e27';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw stars
+                    for (let i = 0; i < 50; i++) {
+                        ctx.beginPath();
+                        ctx.arc(
+                            Math.random() * canvas.width,
+                            Math.random() * canvas.height,
+                            Math.random() * 1.5,
+                            0,
+                            Math.PI * 2
+                        );
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fill();
+                    }
+                    
+                    // Move player
+                    if (keys['ArrowLeft'] && player.x > 0) {
+                        player.x -= player.speed;
+                    }
+                    if (keys['ArrowRight'] && player.x < canvas.width - player.width) {
+                        player.x += player.speed;
+                    }
+                    if (keys['ArrowUp'] && player.y > 0) {
+                        player.y -= player.speed;
+                    }
+                    if (keys['ArrowDown'] && player.y < canvas.height - player.height) {
+                        player.y += player.speed;
+                    }
+                    
+                    // Draw player
+                    ctx.fillStyle = player.color;
+                    ctx.beginPath();
+                    ctx.moveTo(player.x, player.y);
+                    ctx.lineTo(player.x - player.width/2, player.y + player.height);
+                    ctx.lineTo(player.x + player.width/2, player.y + player.height);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Update and draw bullets
+                    for (let i = bullets.length - 1; i >= 0; i--) {
+                        const bullet = bullets[i];
+                        bullet.y -= bullet.speed;
+                        
+                        // Remove bullets that go off screen
+                        if (bullet.y < 0) {
+                            bullets.splice(i, 1);
+                            continue;
+                        }
+                        
+                        // Draw bullet
+                        ctx.fillStyle = '#ffab00';
+                        ctx.fillRect(bullet.x - bullet.width/2, bullet.y, bullet.width, bullet.height);
+                    }
+                    
+                    // Update and draw asteroids
+                    for (let i = asteroids.length - 1; i >= 0; i--) {
+                        const asteroid = asteroids[i];
+                        asteroid.y += asteroid.speed;
+                        asteroid.rotation += asteroid.rotationSpeed;
+                        
+                        // Remove asteroids that go off screen
+                        if (asteroid.y > canvas.height) {
+                            asteroids.splice(i, 1);
+                            createAsteroid();
+                            continue;
+                        }
+                        
+                        // Draw asteroid
+                        ctx.save();
+                        ctx.translate(asteroid.x, asteroid.y);
+                        ctx.rotate(asteroid.rotation);
+                        ctx.fillStyle = '#78909c';
+                        ctx.beginPath();
+                        ctx.arc(0, 0, asteroid.width/2, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                        
+                        // Check collision with player
+                        if (
+                            player.x < asteroid.x + asteroid.width/2 &&
+                            player.x + player.width > asteroid.x - asteroid.width/2 &&
+                            player.y < asteroid.y + asteroid.height/2 &&
+                            player.y + player.height > asteroid.y - asteroid.height/2
+                        ) {
+                            // Player hit
+                            lives--;
+                            livesElement.textContent = lives;
+                            asteroids.splice(i, 1);
+                            createAsteroid();
+                            
+                            if (lives <= 0) {
+                                endGame();
+                            }
+                        }
+                        
+                        // Check collision with bullets
+                        for (let j = bullets.length - 1; j >= 0; j--) {
+                            const bullet = bullets[j];
+                            
+                            if (
+                                bullet.x > asteroid.x - asteroid.width/2 &&
+                                bullet.x < asteroid.x + asteroid.width/2 &&
+                                bullet.y > asteroid.y - asteroid.height/2 &&
+                                bullet.y < asteroid.y + asteroid.height/2
+                            ) {
+                                // Asteroid hit
+                                score += 10;
+                                scoreElement.textContent = score;
+                                bullets.splice(j, 1);
+                                asteroids.splice(i, 1);
+                                createAsteroid();
+                                break;
+                            }
+                        }
+                    }
+                    
+                    requestAnimationFrame(gameLoop);
+                }
+                
+                // End game function
+                function endGame() {
+                    gameRunning = false;
+                    finalScoreElement.textContent = score;
+                    gameOverElement.style.display = 'block';
+                }
+                
+                // Restart button
+                restartButton.addEventListener('click', function() {
+                    score = 0;
+                    lives = 3;
+                    gameRunning = true;
+                    scoreElement.textContent = score;
+                    livesElement.textContent = lives;
+                    gameOverElement.style.display = 'none';
+                    
+                    // Clear arrays
+                    bullets.length = 0;
+                    asteroids.length = 0;
+                    
+                    // Create new asteroids
+                    for (let i = 0; i < 5; i++) {
+                        createAsteroid();
+                    }
+                    
+                    // Reset player position
+                    player.x = canvas.width / 2;
+                    player.y = canvas.height - 50;
+                    
+                    // Start game loop
+                    gameLoop();
+                });
+                
+                // Submit score button
+                submitScoreButton.addEventListener('click', function() {
+                    // In a real application, this would send the score to a server
+                    showToast('Score submitted successfully!', 'success');
+                    
+                    // Add to local leaderboard
+                    addToLeaderboard('asteroid', 'Player', score);
+                    
+                    // Close modal
+                    gameModal.style.display = 'none';
+                });
+                
+                // Start game loop
+                gameLoop();
+            }
+            
+            // Galaxy Explorer Game
+            function launchGalaxyGame() {
+                gameContainer.innerHTML = `
+                    <canvas id="galaxy-game-canvas" width="800" height="500"></canvas>
+                    <div class="game-ui">
+                        <div class="game-score">Resources: <span id="galaxy-resources">0</span></div>
+                        <div class="game-lives">Planets Explored: <span id="galaxy-planets">0</span></div>
+                    </div>
+                `;
+                
+                const canvas = document.getElementById('galaxy-game-canvas');
+                const ctx = canvas.getContext('2d');
+                const resourcesElement = document.getElementById('galaxy-resources');
+                const planetsElement = document.getElementById('galaxy-planets');
+                
+                // Set canvas size to container
+                canvas.width = gameContainer.clientWidth;
+                canvas.height = gameContainer.clientHeight;
+                
+                // Game variables
+                let resources = 0;
+                let planetsExplored = 0;
+                
+                // Create planets
+                const planets = [];
+                const planetTypes = [
+                    { name: 'Rocky Planet', color: '#ff7043', resources: 10 },
+                    { name: 'Gas Giant', color: '#5c6bc0', resources: 20 },
+                    { name: 'Ice Planet', color: '#29b6f6', resources: 15 },
+                    { name: 'Desert Planet', color: '#ffb74d', resources: 12 },
+                    { name: 'Ocean Planet', color: '#26c6da', resources: 18 }
+                ];
+                
+                // Create planets
+                for (let i = 0; i < 8; i++) {
+                    const type = planetTypes[Math.floor(Math.random() * planetTypes.length)];
+                    planets.push({
+                        x: Math.random() * (canvas.width - 100) + 50,
+                        y: Math.random() * (canvas.height - 100) + 50,
+                        radius: Math.random() * 20 + 15,
+                        type: type.name,
+                        color: type.color,
+                        resources: type.resources,
+                        explored: false
+                    });
+                }
+                
+                // Player spaceship
+                const spaceship = {
+                    x: canvas.width / 2,
+                    y: canvas.height / 2,
+                    radius: 15,
+                    color: '#7c4dff',
+                    targetX: canvas.width / 2,
+                    targetY: canvas.height / 2,
+                    speed: 0.1
+                };
+                
+                // Handle canvas click
+                canvas.addEventListener('click', function(e) {
+                    const rect = canvas.getBoundingClientRect();
+                    spaceship.targetX = e.clientX - rect.left;
+                    spaceship.targetY = e.clientY - rect.top;
+                });
+                
+                // Game loop
+                function gameLoop() {
+                    // Clear canvas
+                    ctx.fillStyle = '#0a0e27';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Draw stars
+                    for (let i = 0; i < 100; i++) {
+                        ctx.beginPath();
+                        ctx.arc(
+                            Math.random() * canvas.width,
+                            Math.random() * canvas.height,
+                            Math.random() * 1.5,
+                            0,
+                            Math.PI * 2
+                        );
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fill();
+                    }
+                    
+                    // Draw planets
+                    planets.forEach(planet => {
+                        // Draw glow effect
+                        const gradient = ctx.createRadialGradient(
+                            planet.x, planet.y, 0,
+                            planet.x, planet.y, planet.radius * 2
+                        );
+                        gradient.addColorStop(0, planet.color);
+                        gradient.addColorStop(1, 'transparent');
+                        
+                        ctx.beginPath();
+                        ctx.arc(planet.x, planet.y, planet.radius * 2, 0, Math.PI * 2);
+                        ctx.fillStyle = gradient;
+                        ctx.fill();
+                        
+                        // Draw planet
+                        ctx.beginPath();
+                        ctx.arc(planet.x, planet.y, planet.radius, 0, Math.PI * 2);
+                        ctx.fillStyle = planet.color;
+                        ctx.fill();
+                        
+                        // Draw planet name if explored
+                        if (planet.explored) {
+                            ctx.fillStyle = '#ffffff';
+                            ctx.font = '12px Orbitron';
+                            ctx.textAlign = 'center';
+                            ctx.fillText(planet.type, planet.x, planet.y + planet.radius + 15);
+                        }
+                    });
+                    
+                    // Move spaceship towards target
+                    spaceship.x += (spaceship.targetX - spaceship.x) * spaceship.speed;
+                    spaceship.y += (spaceship.targetY - spaceship.y) * spaceship.speed;
+                    
+                    // Draw spaceship
+                    ctx.fillStyle = spaceship.color;
+                    ctx.beginPath();
+                    ctx.moveTo(spaceship.x, spaceship.y - spaceship.radius);
+                    ctx.lineTo(spaceship.x - spaceship.radius, spaceship.y + spaceship.radius);
+                    ctx.lineTo(spaceship.x + spaceship.radius, spaceship.y + spaceship.radius);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    // Check if spaceship is near a planet
+                    planets.forEach(planet => {
+                        const distance = Math.sqrt(
+                            Math.pow(spaceship.x - planet.x, 2) + 
+                            Math.pow(spaceship.y - planet.y, 2)
+                        );
+                        
+                        if (distance < spaceship.radius + planet.radius && !planet.explored) {
+                            // Explore planet
+                            planet.explored = true;
+                            resources += planet.resources;
+                            planetsExplored++;
+                            resourcesElement.textContent = resources;
+                            planetsElement.textContent = planetsExplored;
+                            
+                            showToast(`Discovered ${planet.type}! +${planet.resources} resources`, 'success');
+                        }
+                    });
+                    
+                    requestAnimationFrame(gameLoop);
+                }
+                
+                // Start game loop
+                gameLoop();
+            }
+            
+            // Planet Puzzle Game
+            function launchPuzzleGame() {
+                gameContainer.innerHTML = `
+                    <div id="puzzle-game-container" style="display: flex; height: 100%;">
+                        <div id="puzzle-board" style="flex: 1; position: relative; background: rgba(10, 14, 39, 0.5); border-radius: 10px; margin-right: 10px;"></div>
+                        <div id="puzzle-pattern" style="width: 200px; background: rgba(26, 35, 126, 0.5); border-radius: 10px; padding: 15px; display: flex; flex-direction: column; align-items: center;">
+                            <h3 style="margin-top: 0; color: var(--highlight-color);">Pattern</h3>
+                            <div id="pattern-display" style="width: 150px; height: 150px; position: relative; background: rgba(10, 14, 39, 0.5); border-radius: 10px; margin-bottom: 15px;"></div>
+                            <div class="game-score">Level: <span id="puzzle-level">1</span></div>
+                            <div class="game-lives">Moves: <span id="puzzle-moves">0</span></div>
+                            <button class="btn btn-primary" id="puzzle-check" style="margin-top: 15px; width: 100%;">Check Solution</button>
+                        </div>
+                    </div>
+                `;
+                
+                const puzzleBoard = document.getElementById('puzzle-board');
+                const patternDisplay = document.getElementById('pattern-display');
+                const levelElement = document.getElementById('puzzle-level');
+                const movesElement = document.getElementById('puzzle-moves');
+                const checkButton = document.getElementById('puzzle-check');
+                
+                // Game variables
+                let level = 1;
+                let moves = 0;
+                let planets = [];
+                let pattern = [];
+                let selectedPlanet = null;
+                
+                // Planet types
+                const planetTypes = [
+                    { name: 'Mercury', color: '#b0bec5' },
+                    { name: 'Venus', color: '#ffb74d' },
+                    { name: 'Earth', color: '#29b6f6' },
+                    { name: 'Mars', color: '#ef5350' },
+                    { name: 'Jupiter', color: '#ffb74d' },
+                    { name: 'Saturn', color: '#fff176' },
+                    { name: 'Uranus', color: '#4fc3f7' },
+                    { name: 'Neptune', color: '#3f51b5' }
+                ];
+                
+                // Initialize game
+                function initGame() {
+                    // Clear previous game
+                    puzzleBoard.innerHTML = '';
+                    patternDisplay.innerHTML = '';
+                    planets = [];
+                    pattern = [];
+                    moves = 0;
+                    movesElement.textContent = moves;
+                    
+                    // Create planets
+                    const planetCount = Math.min(3 + level, 8);
+                    for (let i = 0; i < planetCount; i++) {
+                        const type = planetTypes[i];
+                        
+                        // Create planet for board
+                        const planet = document.createElement('div');
+                        planet.className = 'puzzle-planet';
+                        planet.style.width = '50px';
+                        planet.style.height = '50px';
+                        planet.style.borderRadius = '50%';
+                        planet.style.backgroundColor = type.color;
+                        planet.style.position = 'absolute';
+                        planet.style.cursor = 'pointer';
+                        planet.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+                        planet.style.left = `${Math.random() * (puzzleBoard.clientWidth - 50)}px`;
+                        planet.style.top = `${Math.random() * (puzzleBoard.clientHeight - 50)}px`;
+                        planet.dataset.name = type.name;
+                        planet.dataset.color = type.color;
+                        
+                        // Add drag functionality
+                        planet.addEventListener('mousedown', startDrag);
+                        
+                        puzzleBoard.appendChild(planet);
+                        planets.push(planet);
+                        
+                        // Create planet for pattern
+                        const patternPlanet = document.createElement('div');
+                        patternPlanet.style.width = '30px';
+                        patternPlanet.style.height = '30px';
+                        patternPlanet.style.borderRadius = '50%';
+                        patternPlanet.style.backgroundColor = type.color;
+                        patternPlanet.style.position = 'absolute';
+                        patternPlanet.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.5)';
+                        
+                        // Position in pattern (constellation shape)
+                        const angle = (i / planetCount) * Math.PI * 2;
+                        const distance = 50;
+                        const x = 75 + Math.cos(angle) * distance;
+                        const y = 75 + Math.sin(angle) * distance;
+                        
+                        patternPlanet.style.left = `${x - 15}px`;
+                        patternPlanet.style.top = `${y - 15}px`;
+                        
+                        patternDisplay.appendChild(patternPlanet);
+                        pattern.push({
+                            name: type.name,
+                            x: x,
+                            y: y
+                        });
+                    }
+                    
+                    // Draw constellation lines
+                    const patternCanvas = document.createElement('canvas');
+                    patternCanvas.width = 150;
+                    patternCanvas.height = 150;
+                    patternCanvas.style.position = 'absolute';
+                    patternCanvas.style.top = '0';
+                    patternCanvas.style.left = '0';
+                    patternCanvas.style.pointerEvents = 'none';
+                    
+                    const patternCtx = patternCanvas.getContext('2d');
+                    patternCtx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+                    patternCtx.lineWidth = 1;
+                    
+                    // Connect planets in pattern
+                    for (let i = 0; i < pattern.length; i++) {
+                        const nextIndex = (i + 1) % pattern.length;
+                        patternCtx.beginPath();
+                        patternCtx.moveTo(pattern[i].x, pattern[i].y);
+                        patternCtx.lineTo(pattern[nextIndex].x, pattern[nextIndex].y);
+                        patternCtx.stroke();
+                    }
+                    
+                    patternDisplay.appendChild(patternCanvas);
+                }
+                
+                // Drag functionality
+                function startDrag(e) {
+                    selectedPlanet = e.target;
+                    const rect = puzzleBoard.getBoundingClientRect();
+                    const offsetX = e.clientX - rect.left - selectedPlanet.offsetLeft;
+                    const offsetY = e.clientY - rect.top - selectedPlanet.offsetTop;
+                    
+                    function dragPlanet(e) {
+                        if (!selectedPlanet) return;
+                        
+                        const x = e.clientX - rect.left - offsetX;
+                        const y = e.clientY - rect.top - offsetY;
+                        
+                        selectedPlanet.style.left = `${x}px`;
+                        selectedPlanet.style.top = `${y}px`;
+                    }
+                    
+                    function stopDrag() {
+                        if (selectedPlanet) {
+                            moves++;
+                            movesElement.textContent = moves;
+                            selectedPlanet = null;
+                        }
+                        document.removeEventListener('mousemove', dragPlanet);
+                        document.removeEventListener('mouseup', stopDrag);
+                    }
+                    
+                    document.addEventListener('mousemove', dragPlanet);
+                    document.addEventListener('mouseup', stopDrag);
+                }
+                
+                // Check solution
+                checkButton.addEventListener('click', function() {
+                    // Get planet positions
+                    const positions = [];
+                    planets.forEach(planet => {
+                        positions.push({
+                            name: planet.dataset.name,
+                            x: parseInt(planet.style.left) + 25,
+                            y: parseInt(planet.style.top) + 25
+                        });
+                    });
+                    
+                    // Check if pattern matches (simplified check)
+                    let isMatch = true;
+                    
+                    // For simplicity, we'll just check if all planets are in a circular formation
+                    const centerX = positions.reduce((sum, pos) => sum + pos.x, 0) / positions.length;
+                    const centerY = positions.reduce((sum, pos) => sum + pos.y, 0) / positions.length;
+                    
+                    const distances = positions.map(pos => 
+                        Math.sqrt(Math.pow(pos.x - centerX, 2) + Math.pow(pos.y - centerY, 2))
+                    );
+                    
+                    const avgDistance = distances.reduce((sum, dist) => sum + dist, 0) / distances.length;
+                    
+                    // Check if all distances are close to average
+                    for (const dist of distances) {
+                        if (Math.abs(dist - avgDistance) > 30) {
+                            isMatch = false;
+                            break;
+                        }
+                    }
+                    
+                    if (isMatch) {
+                        showToast('Pattern matched! Advancing to next level.', 'success');
+                        level++;
+                        levelElement.textContent = level;
+                        setTimeout(initGame, 1500);
+                    } else {
+                        showToast('Pattern does not match. Try again!', 'error');
+                    }
+                });
+                
+                // Initialize game
+                initGame();
+            }
+            
+            // Leaderboard functionality
+            const leaderboardTabs = document.querySelectorAll('.tab-btn');
+            const leaderboardBody = document.getElementById('leaderboard-body');
+            
+            // Default leaderboard data
+            const leaderboardData = {
+                asteroid: [
+                    { rank: 1, player: 'StarExplorer', score: 2450, date: '2025-10-15' },
+                    { rank: 2, player: 'CosmicNinja', score: 1980, date: '2025-11-14' },
+                    { rank: 3, player: 'GalaxyGazer', score: 1750, date: '2025-11-13' },
+                    { rank: 4, player: 'SpaceCadet', score: 1620, date: '2025-11-12' },
+                    { rank: 5, player: 'AstroAce', score: 1580, date: '2025-11-11' }
+                ],
+                galaxy: [
+                    { rank: 1, player: 'NebulaNomad', score: 320, date: '2025-10-15' },
+                    { rank: 2, player: 'PlanetHopper', score: 285, date: '2025-10-14' },
+                    { rank: 3, player: 'StarSeeker', score: 260, date: '2025-11-13' },
+                    { rank: 4, player: 'CosmicVoyager', score: 240, date: '2025-10-12' },
+                    { rank: 5, player: 'SpaceWalker', score: 220, date: '2025-11-11' }
+                ],
+                puzzle: [
+                    { rank: 1, player: 'PuzzleMaster', score: 15, date: '2025-10-15' },
+                    { rank: 2, player: 'BrainyAstronaut', score: 12, date: '2025-11-14' },
+                    { rank: 3, player: 'CosmicSolver', score: 10, date: '2025-11-13' },
+                    { rank: 4, player: 'SpacePuzzler', score: 8, date: '2025-11-12' },
+                    { rank: 5, player: 'GalaxyMind', score: 7, date: '2025-11-11' }
+                ],
+                overall: [
+                    { rank: 1, player: 'StarExplorer', score: 4950, date: '2025-10-15' },
+                    { rank: 2, player: 'CosmicNinja', score: 4265, date: '2025-11-14' },
+                    { rank: 3, player: 'NebulaNomad', score: 4020, date: '2025-11-15' },
+                    { rank: 4, player: 'GalaxyGazer', score: 3890, date: '2025-10-13' },
+                    { rank: 5, player: 'PuzzleMaster', score: 3750, date: '2025-11-15' }
+                ]
+            };
+            
+            // Load leaderboard from localStorage if available
+            function loadLeaderboard() {
+                const savedLeaderboard = localStorage.getItem('astralquest-leaderboard');
+                if (savedLeaderboard) {
+                    try {
+                        const parsed = JSON.parse(savedLeaderboard);
+                        // Merge with default data
+                        Object.keys(parsed).forEach(game => {
+                            if (leaderboardData[game]) {
+                                leaderboardData[game] = [...parsed[game], ...leaderboardData[game]]
+                                    .sort((a, b) => b.score - a.score)
+                                    .slice(0, 5)
+                                    .map((item, index) => ({ ...item, rank: index + 1 }));
+                            }
+                        });
+                    } catch (e) {
+                        console.error('Error loading leaderboard:', e);
+                    }
+                }
+            }
+            
+            // Add score to leaderboard
+            function addToLeaderboard(game, player, score) {
+                if (!leaderboardData[game]) return;
+                
+                leaderboardData[game].push({
+                    rank: 0, // Will be recalculated
+                    player: player,
+                    score: score,
+                    date: new Date().toISOString().split('T')[0]
+                });
+                
+                // Sort by score
+                leaderboardData[game].sort((a, b) => b.score - a.score);
+                
+                // Update ranks and keep only top 5
+                leaderboardData[game] = leaderboardData[game]
+                    .slice(0, 5)
+                    .map((item, index) => ({ ...item, rank: index + 1 }));
+                
+                // Save to localStorage
+                localStorage.setItem('astralquest-leaderboard', JSON.stringify(leaderboardData));
+                
+                // Update overall leaderboard
+                updateOverallLeaderboard();
+                
+                // Refresh current tab
+                const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+                displayLeaderboard(activeTab);
+            }
+            
+            // Update overall leaderboard
+            function updateOverallLeaderboard() {
+                const playerScores = {};
+                
+                // Aggregate scores from all games
+                Object.keys(leaderboardData).forEach(game => {
+                    if (game === 'overall') return;
+                    
+                    leaderboardData[game].forEach(entry => {
+                        if (!playerScores[entry.player]) {
+                            playerScores[entry.player] = 0;
+                        }
+                        playerScores[entry.player] += entry.score;
+                    });
+                });
+                
+                // Convert to array and sort
+                const overallData = Object.keys(playerScores).map(player => ({
+                    rank: 0,
+                    player: player,
+                    score: playerScores[player],
+                    date: new Date().toISOString().split('T')[0]
+                }));
+                
+                overallData.sort((a, b) => b.score - a.score);
+                
+                // Update ranks and keep only top 5
+                leaderboardData.overall = overallData
+                    .slice(0, 5)
+                    .map((item, index) => ({ ...item, rank: index + 1 }));
+            }
+            
+            // Display leaderboard
+            function displayLeaderboard(game) {
+                leaderboardBody.innerHTML = '';
+                
+                if (!leaderboardData[game]) return;
+                
+                leaderboardData[game].forEach(entry => {
+                    const row = document.createElement('tr');
+                    
+                    // Add rank class for top 3
+                    let rankClass = '';
+                    if (entry.rank === 1) rankClass = 'rank-1';
+                    else if (entry.rank === 2) rankClass = 'rank-2';
+                    else if (entry.rank === 3) rankClass = 'rank-3';
+                    
+                    row.innerHTML = `
+                        <td class="rank ${rankClass}">#${entry.rank}</td>
+                        <td class="player-name">${entry.player}</td>
+                        <td class="player-score">${entry.score.toLocaleString()}</td>
+                        <td>${entry.date}</td>
+                    `;
+                    
+                    leaderboardBody.appendChild(row);
+                });
+            }
+            
+            // Tab click handlers
+            leaderboardTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Update active tab
+                    leaderboardTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Display leaderboard for selected game
+                    const game = this.getAttribute('data-tab');
+                    displayLeaderboard(game);
+                });
+            });
+            
+            // Initialize leaderboard
+            loadLeaderboard();
+            displayLeaderboard('asteroid');
+            
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletter-form');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // In a real application, this would send the email to a server
+                showToast('Thank you for subscribing to our newsletter!', 'success');
+                this.reset();
+            });
+            
+            // Toast notification function
+            function showToast(message, type = 'info') {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toast-message');
+                
+                toastMessage.textContent = message;
+                toast.className = 'toast show';
+                
+                if (type === 'success') {
+                    toast.classList.add('success');
+                } else if (type === 'error') {
+                    toast.classList.add('error');
+                }
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Social sharing functionality
+            function shareOnSocial(platform) {
+                const url = encodeURIComponent(window.location.href);
+                const text = encodeURIComponent('Check out Astral Quest - an amazing space exploration experience!');
+                
+                let shareUrl = '';
+                
+                switch(platform) {
+                    case 'facebook':
+                        shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                        break;
+                    case 'twitter':
+                        shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${text}`;
+                        break;
+                    case 'linkedin':
+                        shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                        break;
+                }
+                
+                if (shareUrl) {
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                }
+            }
+            
+            // Add social sharing to footer links
+            document.querySelectorAll('.social-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const icon = this.querySelector('i');
+                    
+                    if (icon.classList.contains('fa-facebook-f')) {
+                        shareOnSocial('facebook');
+                    } else if (icon.classList.contains('fa-twitter')) {
+                        shareOnSocial('twitter');
+                    } else if (icon.classList.contains('fa-linkedin-in')) {
+                        shareOnSocial('linkedin');
+                    }
+                });
+            });
+            
+            // Add scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe all sections
+            document.querySelectorAll('section').forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
